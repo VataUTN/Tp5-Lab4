@@ -1,8 +1,9 @@
 import { Box, Button, Modal, Stack, Typography } from "@mui/material";
 import { Instrumento } from "../types/Instrumento";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getInstrumentoById } from "../api/ApiInstrumento";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import { CarritoContext } from "../context/CarritoContext";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -24,10 +25,12 @@ interface ModalDetalleProps {
 }
 
 export const ModalDetalle: React.FC<ModalDetalleProps> = ({
-	open,
-	instrumentoId,
-	handleClose,
-}) => {
+															  open,
+															  instrumentoId,
+															  handleClose,
+														  }) => {
+	const { agregarAlCarrito } = useContext(CarritoContext)
+
 	const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
 
 	useEffect(() => {
@@ -42,6 +45,12 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 		};
 		fetchData();
 	}, []);
+
+	const handleAgregarAlCarrito = () => {
+		if (instrumento) {
+			agregarAlCarrito({ instrumento, cantidad: 1 });
+		}
+	};
 
 	return (
 		<Modal
@@ -129,7 +138,9 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 								)}
 							</Box>
 							<Box>
-								<Button variant="outlined">Agregar al Carrito</Button>
+								<Button variant="outlined" onClick={handleAgregarAlCarrito}>
+									Agregar al Carrito
+								</Button>
 							</Box>
 						</Stack>
 					</Stack>

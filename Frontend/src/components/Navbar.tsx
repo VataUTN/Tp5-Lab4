@@ -12,21 +12,27 @@ function a11yProps(index: number) {
 }
 
 export default function Navbar() {
+
 	const [value, setValue] = React.useState(0);
 
-	const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue);
 	};
 
 	return (
+
 		<Box sx={{ width: "100%" }}>
+
 			<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+
 				<Tabs
 					value={value}
 					onChange={handleChange}
 					aria-label="basic tabs example"
 				>
+
 					<Tab label="Home" component={Link} to="/" {...a11yProps(0)} />
+
 					<Tab
 						label="Donde Estamos"
 						component={Link}
@@ -40,6 +46,12 @@ export default function Navbar() {
 						{...a11yProps(2)}
 					/>
 					<Tab
+						label="Carrito"
+						component={Link}
+						to="/carrito"
+						{...a11yProps(2)}
+					/>
+					<Tab
 						label="Admin"
 						component={Link}
 						to="/admin"
@@ -48,6 +60,7 @@ export default function Navbar() {
 					/>
 				</Tabs>
 			</Box>
+
 		</Box>
 	);
 }
