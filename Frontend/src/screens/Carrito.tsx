@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import * as React from "react";
@@ -21,26 +21,13 @@ import {
     MDBTooltip,
     MDBTypography,
 } from "mdb-react-ui-kit";
-import {Pedido} from "../types/Pedido.ts";
 
 
 export default function Carrito() {
-    const [lastId, setlastId] = useState<number | undefined>(0);
+    const [, setlastId] = useState<number | undefined>(0);
 
-    const [showMessage, setShowMessage] = React.useState(false);
-    const handleCloseMessage = (
-        event: React.SyntheticEvent | Event,
-        reason?: string
-    ) => {
-        if (reason === "clickaway") {
-            return;
-        }
-
-        setShowMessage(false);
-    };
-
+    const [, setShowMessage] = React.useState(false);
     const {pedido, removerDelCarrito, agregarAlCarrito, vaciarCarrito} = React.useContext(CarritoContext);
-const [totalenvio,setTotalEnvio] = useState<number>();
     const agruparDetallesPorInstrumento = (detalles: PedidoDetalle[]) => {
         return detalles.reduce((acumulador, detalle) => {
             const instrumentoId = detalle.instrumento.id;
@@ -68,6 +55,10 @@ const [totalenvio,setTotalEnvio] = useState<number>();
                 ...pedido,
                 fechaPedido: new Date().toISOString().split("T")[0], // Agrega la fecha actual
                 totalPedido: totalPedido, // Agrega el subtotal como total
+                detalles: pedido.detalles.map(detalle => ({
+                    ...detalle,
+                    pedido: null // La relación se establecerá en el backend
+                }))
             };
             const response = await fetch("http://localhost:8080/pedido/create", {
                 method: "POST",
@@ -81,34 +72,13 @@ const [totalenvio,setTotalEnvio] = useState<number>();
                 setlastId(data.id);
                 setShowMessage(true);
             }
-            vaciarCarrito()
+            vaciarCarrito();
         } catch (error) {
             setlastId(undefined);
             setShowMessage(true);
         }
     };
 
-    const realizarPedido = async () => {
-        // Aquí puedes preparar los datos del pedido para enviar al backend
-        const totalEnvio = pedido.detalles.reduce((total, detalle) => {
-            if (detalle.instrumento.costoEnvio !== "G") {
-                return total + parseFloat(detalle.instrumento.costoEnvio);
-            } else {
-                return total;
-            }
-        }, 0);
-        const totalPedido = pedido.subtotal + totalEnvio;
-        const pedido: Pedido = {
-            fechaPedido: new Date(),
-            totalPedido: totalPedido,
-            detalles: pedido.map(({ id, cantidad, precio, instrumento, marca, modelo, imagen, costoEnvio, cantidadVendida, descripcion, categoria }): PedidoDetalle => ({
-                cantidad: cantidad,
-                instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
-            })),
-        };
-        await postData<Pedido>("http://localhost:8080/pedido/create", pedido);
-        console.log(pedido);
-    };
     return (
         <section className="h-100 gradient-custom">
             <MDBContainer className="py-5 h-100">
@@ -121,7 +91,7 @@ const [totalenvio,setTotalEnvio] = useState<number>();
                                 </MDBTypography>
                             </MDBCardHeader>
                             <MDBCardBody>
-                                {Object.values(detallesAgrupados).map((detalle, index) => (
+                                {Object.values(detallesAgrupados).map((detalle) => (
                                     <MDBRow>
                                         <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
                                             <MDBRipple rippleTag="div" rippleColor="light"
@@ -206,8 +176,6 @@ const [totalenvio,setTotalEnvio] = useState<number>();
                                         Envío
                                         <span>${pedido.detalles.reduce((total, detalle) => {
                                             if (detalle.instrumento.costoEnvio !== "G") {
-                                                const temp = total + parseFloat(detalle.instrumento.costoEnvio);
-
                                                 return total + parseFloat(detalle.instrumento.costoEnvio);
 
                                             } else {

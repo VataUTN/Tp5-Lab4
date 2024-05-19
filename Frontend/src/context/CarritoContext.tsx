@@ -9,8 +9,13 @@ interface CarritoContextProps {
     vaciarCarrito:()=>void;
 }
 
-export const CarritoContext = createContext<CarritoContextProps | undefined>(
-    undefined
+export const CarritoContext = createContext<CarritoContextProps>({
+        agregarAlCarrito(): void {
+        }, pedido: undefined, removerDelCarrito(): void {
+        }, vaciarCarrito(): void {
+        }
+
+    }
 );
 
 export const CarritoProvider: React.FC<{

@@ -10,17 +10,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PedidoDetalle extends Base{
+public class PedidoDetalle extends Base {
 
     private Integer cantidad;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "pedido_id")
     @JsonBackReference
     private Pedido pedido;
@@ -28,5 +27,4 @@ public class PedidoDetalle extends Base{
     @ManyToOne
     @JoinColumn(name = "instrumento_id")
     private Instrumento instrumento;
-
 }
