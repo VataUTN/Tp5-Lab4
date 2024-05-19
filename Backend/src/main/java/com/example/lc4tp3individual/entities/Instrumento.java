@@ -1,5 +1,6 @@
 package com.example.lc4tp3individual.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -31,5 +32,6 @@ public class Instrumento extends Base{
     private Categoria categoria;
 
     @OneToMany(mappedBy = "instrumento")
+    @JsonBackReference
     private List<PedidoDetalle> pedidosDetalles;
 }
