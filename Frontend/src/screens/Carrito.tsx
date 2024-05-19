@@ -1,4 +1,3 @@
-
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import * as React from "react";
@@ -21,13 +20,14 @@ import {
     MDBTooltip,
     MDBTypography,
 } from "mdb-react-ui-kit";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Carrito() {
     const [, setlastId] = useState<number | undefined>(0);
-
     const [, setShowMessage] = React.useState(false);
     const {pedido, removerDelCarrito, agregarAlCarrito, vaciarCarrito} = React.useContext(CarritoContext);
+
     const agruparDetallesPorInstrumento = (detalles: PedidoDetalle[]) => {
         return detalles.reduce((acumulador, detalle) => {
             const instrumentoId = detalle.instrumento.id;
@@ -53,11 +53,11 @@ export default function Carrito() {
             const totalPedido = pedido.subtotal + totalEnvio;
             const pedidoCompleto = {
                 ...pedido,
-                fechaPedido: new Date().toISOString().split("T")[0], // Agrega la fecha actual
-                totalPedido: totalPedido, // Agrega el subtotal como total
+                fechaPedido: new Date().toISOString().split("T")[0],
+                totalPedido: totalPedido,
                 detalles: pedido.detalles.map(detalle => ({
                     ...detalle,
-                    pedido: null // La relación se establecerá en el backend
+                    pedido: null
                 }))
             };
             const response = await fetch("http://localhost:8080/pedido/create", {
@@ -71,11 +71,15 @@ export default function Carrito() {
             if (data) {
                 setlastId(data.id);
                 setShowMessage(true);
+                toast.success(`El pedido con id ${data.id} se guardó correctamente`);
+                vaciarCarrito();
+            } else {
+                throw new Error('Error al guardar el pedido');
             }
-            vaciarCarrito();
         } catch (error) {
             setlastId(undefined);
             setShowMessage(true);
+            toast.error("Hubo un error con la compra del pedido");
         }
     };
 
@@ -91,14 +95,14 @@ export default function Carrito() {
                                 </MDBTypography>
                             </MDBCardHeader>
                             <MDBCardBody>
-                                {Object.values(detallesAgrupados).map((detalle) => (
-                                    <MDBRow>
+                                {Object.values(detallesAgrupados).map((detalle, index) => (
+                                    <MDBRow key={index}>
                                         <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
                                             <MDBRipple rippleTag="div" rippleColor="light"
                                                        className="bg-image rounded hover-zoom hover-overlay">
                                                 <img
                                                     src={detalle.instrumento.imagen}
-                                                    className="w-100"/>
+                                                    className="w-100" alt={detalle.instrumento.instrumento} />
                                                 <a href="#!">
                                                     <div className="mask"
                                                          style={{backgroundColor: "rgba(251, 251, 251, 0.2)",}}>
@@ -121,9 +125,7 @@ export default function Carrito() {
                                             }}>
                                                 <MDBTooltip wrapperProps={{size: "sm"}} wrapperClass="me-1 mb-2"
                                                             title="Eliminar producto">
-
                                                     <MDBIcon fas icon="trash"/>
-
                                                 </MDBTooltip>
                                             </div>
                                         </MDBCol>
@@ -137,7 +139,7 @@ export default function Carrito() {
                                                     <MDBIcon fas icon="minus"/>
                                                 </MDBBtn>
 
-                                                <MDBInput value={detalle.cantidad} min={1} type="number" label="Cantidad"/>
+                                                <MDBInput value={detalle.cantidad} min={1} type="number" label="Cantidad" readOnly />
 
                                                 <MDBBtn className="px-3 ms-2" onClick={() => {
                                                     const nuevoDetalle = { ...detalle, cantidad: 1 };
@@ -193,14 +195,14 @@ export default function Carrito() {
                                             </strong>
                                         </div>
                                         <span>
-                  <strong>${pedido.detalles.reduce((total, detalle) => {
-                      if (detalle.instrumento.costoEnvio !== "G") {
-                          return total + parseFloat(detalle.instrumento.costoEnvio);
-                      } else {
-                          return total;
-                      }
-                  }, 0) + pedido.subtotal}</strong>
-                </span>
+                                            <strong>${pedido.detalles.reduce((total, detalle) => {
+                                                if (detalle.instrumento.costoEnvio !== "G") {
+                                                    return total + parseFloat(detalle.instrumento.costoEnvio);
+                                                } else {
+                                                    return total;
+                                                }
+                                            }, 0) + pedido.subtotal}</strong>
+                                        </span>
                                     </MDBListGroupItem>
                                 </MDBListGroup>
 
@@ -212,6 +214,7 @@ export default function Carrito() {
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
+            <ToastContainer />
         </section>
     );
 }
