@@ -16,4 +16,9 @@ public class PedidoServiceImpl extends BaseServiceImp<Pedido, Long> implements P
         super(baseRepository);
         this.pedidoRepository = pedidoRepository;
     }
+
+    @Override
+    public Pedido createPedido(Pedido pedido) {
+        return pedidoRepository.save(pedido);
+    }
 }

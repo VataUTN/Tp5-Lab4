@@ -22,6 +22,7 @@ import {
 } from "mdb-react-ui-kit";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {PaymentForm} from "../components/PaymentForm.tsx";
 
 export default function Carrito() {
     const [, setlastId] = useState<number | undefined>(0);
@@ -206,9 +207,7 @@ export default function Carrito() {
                                     </MDBListGroupItem>
                                 </MDBListGroup>
 
-                                <MDBBtn block size="lg" onClick={handleComprar}>
-                                    Ir a pagar
-                                </MDBBtn>
+                                <PaymentForm handleComprar={handleComprar} />
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

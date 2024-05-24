@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Pedido extends Base {
+public class Pedido extends Base{
 
     private LocalDate fechaPedido;
     private Double totalPedido;
@@ -25,4 +25,5 @@ public class Pedido extends Base {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<PedidoDetalle> detalles;
+
 }
