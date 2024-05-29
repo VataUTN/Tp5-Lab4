@@ -16,6 +16,8 @@ const style = {
 	borderRadius: "10px",
 	padding: "3%",
 	boxShadow: "0px 1px 0px rgba(0,0,0,0.2)",
+	overflow: "auto",
+	maxHeight: "90vh",
 };
 
 interface ModalDetalleProps {
@@ -29,7 +31,7 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 															  instrumentoId,
 															  handleClose,
 														  }) => {
-	const { agregarAlCarrito } = useContext(CarritoContext)
+	const { agregarAlCarrito } = useContext(CarritoContext);
 
 	const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
 
@@ -44,7 +46,7 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 			}
 		};
 		fetchData();
-	}, []);
+	}, [instrumentoId]);
 
 	const handleAgregarAlCarrito = () => {
 		if (instrumento) {
@@ -59,12 +61,16 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 			aria-labelledby="modal-modal-title"
 			aria-describedby="modal-modal-description"
 		>
-			<Box height="65%" sx={style}>
+			<Box sx={style}>
 				{instrumento ? (
-					<Stack direction="row" height="100%">
+					<Stack
+						direction={{ xs: "column", md: "row" }}
+						spacing={2}
+						height="100%"
+					>
 						<Stack
 							sx={{
-								width: "55%",
+								width: { xs: "100%", md: "55%" },
 								margin: "15px",
 							}}
 						>
@@ -73,7 +79,8 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 									<img
 										style={{
 											padding: "24px",
-											width: "40%",
+											width: "100%",
+											maxWidth: "300px",
 										}}
 										src={`${instrumento.imagen}`}
 										alt={`${instrumento.instrumento}`}
@@ -85,10 +92,10 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 								</Typography>
 							</Box>
 						</Stack>
-						<Box sx={{ borderLeft: "1px solid grey", m: "15px" }} />
+						<Box sx={{ borderLeft: { md: "1px solid grey" }, m: "15px" }} />
 						<Stack
 							sx={{
-								width: "45%",
+								width: { xs: "100%", md: "45%" },
 								margin: "15px",
 							}}
 							direction="column"
@@ -102,9 +109,7 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 									$ {instrumento.precio}
 								</Typography>
 								<Typography variant="h6">Marca: {instrumento.marca}</Typography>
-								<Typography variant="h6">
-									Modelo: {instrumento.modelo}
-								</Typography>
+								<Typography variant="h6">Modelo: {instrumento.modelo}</Typography>
 								{instrumento.costoEnvio === "G" ? (
 									<Stack direction="row" alignItems="center">
 										<Box mt="10%">
@@ -147,7 +152,7 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 				) : (
 					<Stack direction="row" height="100%">
 						<Typography>
-							No se encontró el instrumento. Intente denuevo más tarde
+							No se encontró el instrumento. Intente de nuevo más tarde
 						</Typography>
 					</Stack>
 				)}

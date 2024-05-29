@@ -40,7 +40,7 @@ export const Carrusel: React.FC = () => {
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box sx={{ flexGrow: 1, width: "57%", height: "0%", margin: "0 auto" }}>
 			<AutoPlaySwipeableViews
 				axis={theme.direction === "rtl" ? "x-reverse" : "x"}
 				index={activeStep}
@@ -54,8 +54,9 @@ export const Carrusel: React.FC = () => {
 								component="img"
 								sx={{
 									display: "block",
-									overflow: "hidden",
 									width: "100%",
+									height: "100%",
+									objectFit: "cover",
 								}}
 								src={step.imgPath}
 								alt={"algo salio mal"}

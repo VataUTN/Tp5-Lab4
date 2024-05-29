@@ -25,7 +25,7 @@ public class Instrumento extends Base{
     private String imagen;
     private String precio;
     private String costoEnvio;
-    private String cantidadVendida;
+    private int cantidadVendida;
     @Column(length = 1000)
     private String descripcion;
 
