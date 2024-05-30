@@ -1,9 +1,9 @@
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import * as React from "react";
-import {CarritoContext} from "../context/CarritoContext";
-import {PedidoDetalle} from "../types/PedidoDetalle";
-import {useState} from "react";
+import { CarritoContext } from "../context/CarritoContext";
+import { PedidoDetalle } from "../types/PedidoDetalle";
+import { useState } from "react";
 import {
     MDBBtn,
     MDBCard,
@@ -22,18 +22,18 @@ import {
 } from "mdb-react-ui-kit";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {PaymentForm} from "../components/PaymentForm.tsx";
+import { PaymentForm } from "../components/PaymentForm.tsx";
 
 export default function Carrito() {
     const [, setlastId] = useState<number | undefined>(0);
     const [, setShowMessage] = React.useState(false);
-    const {pedido, removerDelCarrito, agregarAlCarrito, vaciarCarrito} = React.useContext(CarritoContext);
+    const { pedido, removerDelCarrito, agregarAlCarrito, vaciarCarrito } = React.useContext(CarritoContext);
 
     const agruparDetallesPorInstrumento = (detalles: PedidoDetalle[]) => {
         return detalles.reduce((acumulador, detalle) => {
             const instrumentoId = detalle.instrumento.id;
             if (!acumulador[instrumentoId]) {
-                acumulador[instrumentoId] = {...detalle, cantidad: 0};
+                acumulador[instrumentoId] = { ...detalle, cantidad: 0 };
             }
             acumulador[instrumentoId].cantidad += detalle.cantidad;
             return acumulador;
@@ -42,7 +42,31 @@ export default function Carrito() {
 
     const detallesAgrupados = agruparDetallesPorInstrumento(pedido.detalles);
 
+    const actualizarCantidadVendida = async (instrumentoId: number, cantidad: number) => {
+        try {
+            const response = await fetch(`http://localhost:8080/instrumento/update-vendidos/${instrumentoId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ cantidadVendida: cantidad }),
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Error al actualizar la cantidad vendida: ${errorText}`);
+            }
+            console.log(`Cantidad vendida actualizada para instrumento ${instrumentoId}: ${cantidad}`);
+        } catch (error) {
+            console.error(`Error actualizando la cantidad vendida para instrumento ${instrumentoId}:`, error);
+        }
+    };
+
     const handleComprar = async () => {
+        if (pedido.detalles.length === 0) {
+            toast.error("El carrito está vacío. Agrega productos antes de comprar.");
+            return;
+        }
+
         try {
             const totalEnvio = pedido.detalles.reduce((total, detalle) => {
                 if (detalle.instrumento.costoEnvio !== "G") {
@@ -73,6 +97,9 @@ export default function Carrito() {
                 setlastId(data.id);
                 setShowMessage(true);
                 toast.success(`El pedido con id ${data.id} se guardó correctamente`);
+                for (const detalle of pedido.detalles) {
+                    await actualizarCantidadVendida(detalle.instrumento.id, detalle.cantidad);
+                }
                 vaciarCarrito();
             } else {
                 throw new Error('Error al guardar el pedido');
@@ -106,7 +133,7 @@ export default function Carrito() {
                                                     className="w-100" alt={detalle.instrumento.instrumento} />
                                                 <a href="#!">
                                                     <div className="mask"
-                                                         style={{backgroundColor: "rgba(251, 251, 251, 0.2)",}}>
+                                                         style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
                                                     </div>
                                                 </a>
                                             </MDBRipple>
@@ -124,20 +151,20 @@ export default function Carrito() {
                                                     removerDelCarrito(detalle.instrumento.id);
                                                 }
                                             }}>
-                                                <MDBTooltip wrapperProps={{size: "sm"}} wrapperClass="me-1 mb-2"
+                                                <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
                                                             title="Eliminar producto">
-                                                    <MDBIcon fas icon="trash"/>
+                                                    <MDBIcon fas icon="trash" />
                                                 </MDBTooltip>
                                             </div>
                                         </MDBCol>
                                         <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
-                                            <div className="d-flex mb-4" style={{maxWidth: "300px"}}>
+                                            <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
                                                 <MDBBtn className="px-3 me-2" onClick={() => {
                                                     if (detalle.cantidad > 1) {
                                                         removerDelCarrito(detalle.instrumento.id);
                                                     }
                                                 }}>
-                                                    <MDBIcon fas icon="minus"/>
+                                                    <MDBIcon fas icon="minus" />
                                                 </MDBBtn>
 
                                                 <MDBInput value={detalle.cantidad} min={1} type="number" label="Cantidad" readOnly />
@@ -146,15 +173,15 @@ export default function Carrito() {
                                                     const nuevoDetalle = { ...detalle, cantidad: 1 };
                                                     agregarAlCarrito(nuevoDetalle);
                                                 }}>
-                                                    <MDBIcon fas icon="plus"/>
+                                                    <MDBIcon fas icon="plus" />
                                                 </MDBBtn>
                                             </div>
 
                                             <p className="text-start text-md-center">
-                                                <strong>${((detalle.instrumento.precio)*(detalle.cantidad))}</strong>
+                                                <strong>${((detalle.instrumento.precio) * (detalle.cantidad))}</strong>
                                             </p>
                                         </MDBCol>
-                                        <hr className="my-4"/>
+                                        <hr className="my-4" />
                                     </MDBRow>
                                 ))}
                             </MDBCardBody>
@@ -180,9 +207,7 @@ export default function Carrito() {
                                         <span>${pedido.detalles.reduce((total, detalle) => {
                                             if (detalle.instrumento.costoEnvio !== "G") {
                                                 return total + parseFloat(detalle.instrumento.costoEnvio);
-
                                             } else {
-
                                                 return total;
                                             }
                                         }, 0)}</span>
