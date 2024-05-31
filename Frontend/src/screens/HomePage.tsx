@@ -1,8 +1,27 @@
-import { Typography, Box, Container, Grid, Card, CardContent, CardMedia, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+	Typography, Box, Container, Grid, Card, CardContent, CardMedia, Button
+} from "@mui/material";
 import { Carrusel } from "../components/Carrusel";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export const HomePage = () => {
+	const [masVendidos, setMasVendidos] = useState([]);
+
+	useEffect(() => {
+		const fetchMasVendidos = async () => {
+			try {
+				const response = await axios.get("http://localhost:8080/instrumento/masVendidos");
+				setMasVendidos(response.data.slice(0, 3));
+			} catch (error) {
+				console.error("Error fetching most sold instruments", error);
+			}
+		};
+
+		fetchMasVendidos();
+	}, []);
+
 	return (
 		<Container maxWidth="lg" sx={{ mt: 4 }}>
 			<Typography variant="h2" align="center" gutterBottom>
@@ -22,60 +41,29 @@ export const HomePage = () => {
 				Destacados
 			</Typography>
 			<Grid container spacing={4}>
-				<Grid item xs={12} sm={6} md={4}>
-					<Card>
-						<CardMedia
-							component="img"
-							height="140"
-							image="https://source.unsplash.com/random?instrument"
-							alt="Instrumento 1"
-						/>
-						<CardContent>
-							<Typography gutterBottom variant="h5" component="div">
-								Instrumento 1
-							</Typography>
-							<Typography variant="body2" color="textSecondary">
-								Descripción del instrumento 1.
-							</Typography>
-						</CardContent>
-					</Card>
-				</Grid>
-				<Grid item xs={12} sm={6} md={4}>
-					<Card>
-						<CardMedia
-							component="img"
-							height="140"
-							image="https://source.unsplash.com/random?guitar"
-							alt="Instrumento 2"
-						/>
-						<CardContent>
-							<Typography gutterBottom variant="h5" component="div">
-								Instrumento 2
-							</Typography>
-							<Typography variant="body2" color="textSecondary">
-								Descripción del instrumento 2.
-							</Typography>
-						</CardContent>
-					</Card>
-				</Grid>
-				<Grid item xs={12} sm={6} md={4}>
-					<Card>
-						<CardMedia
-							component="img"
-							height="140"
-							image="https://source.unsplash.com/random?music"
-							alt="Instrumento 3"
-						/>
-						<CardContent>
-							<Typography gutterBottom variant="h5" component="div">
-								Instrumento 3
-							</Typography>
-							<Typography variant="body2" color="textSecondary">
-								Descripción del instrumento 3.
-							</Typography>
-						</CardContent>
-					</Card>
-				</Grid>
+				{masVendidos.map((instrumento, index) => (
+					<Grid item xs={12} sm={6} md={4} key={index}>
+						<Card sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+							<CardMedia
+								component="img"
+								height="140"
+								image={instrumento.imagen}
+								alt={instrumento.instrumento}
+							/>
+							<CardContent sx={{ flexGrow: 1 }}>
+								<Typography gutterBottom variant="h5" component="div" noWrap>
+									{instrumento.instrumento}
+								</Typography>
+								<Typography variant="body2" color="textSecondary" noWrap>
+									Vendidos: {instrumento.cantidadVendida}
+								</Typography>
+								<Typography variant="body2" color="textSecondary" noWrap>
+									Precio: ${instrumento.precio}
+								</Typography>
+							</CardContent>
+						</Card>
+					</Grid>
+				))}
 			</Grid>
 
 			<Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
