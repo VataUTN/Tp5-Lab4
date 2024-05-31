@@ -23,12 +23,22 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PaymentForm } from "../components/PaymentForm.tsx";
+import {ModalDetalle} from "../components/ModalDetalle.tsx";
 
 export default function Carrito() {
     const [, setlastId] = useState<number | undefined>(0);
     const [, setShowMessage] = React.useState(false);
     const { pedido, removerDelCarrito, agregarAlCarrito, vaciarCarrito } = React.useContext(CarritoContext);
 
+    const [selectedInstrumentoId, setSelectedInstrumentoId] = useState<string | null>(null);
+
+    const handleOpen = (instrumentoId: string) => {
+        setSelectedInstrumentoId(instrumentoId);
+    };
+
+    const handleClose = () => {
+        setSelectedInstrumentoId(null);
+    };
     const agruparDetallesPorInstrumento = (detalles: PedidoDetalle[]) => {
         return detalles.reduce((acumulador, detalle) => {
             const instrumentoId = detalle.instrumento.id;
@@ -130,12 +140,11 @@ export default function Carrito() {
                                                        className="bg-image rounded hover-zoom hover-overlay">
                                                 <img
                                                     src={detalle.instrumento.imagen}
-                                                    className="w-100" alt={detalle.instrumento.instrumento} />
-                                                <a href="#!">
-                                                    <div className="mask"
-                                                         style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
-                                                    </div>
-                                                </a>
+                                                    className="w-100"
+                                                    alt={detalle.instrumento.instrumento}
+                                                    onClick={() => handleOpen(detalle.instrumento.id.toString())} // Use the instrument's ID to open the specific modal
+                                                    style={{cursor: 'pointer'}} // Add cursor pointer to indicate it's clickable
+                                                />
                                             </MDBRipple>
                                         </MDBCol>
 
@@ -184,6 +193,14 @@ export default function Carrito() {
                                         <hr className="my-4" />
                                     </MDBRow>
                                 ))}
+                                {selectedInstrumentoId && (
+                                    <ModalDetalle
+                                        open={!!selectedInstrumentoId} // Modal is open if there's a selected instrument ID
+                                        instrumentoId={selectedInstrumentoId}
+                                        handleClose={handleClose}
+                                        showAgregarButton={false} // Hide the add to cart button
+                                    />
+                                )}
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
@@ -240,5 +257,6 @@ export default function Carrito() {
             </MDBContainer>
             <ToastContainer />
         </section>
+
     );
 }

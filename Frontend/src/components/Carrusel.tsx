@@ -10,17 +10,14 @@ import { Stack } from "@mui/material";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const images = [
-	{
-		imgPath: "https://wallpapercave.com/wp/wp9291728.jpg",
-	},
-	{
-		imgPath: "https://wallpapercave.com/wp/wp9291723.jpg",
-	},
-	{
-		imgPath: "https://wallpapercave.com/wp/wp9291725.jpg",
-	},
-];
+// Generar URLs de imágenes aleatorias
+const generateRandomImages = (count: number) => {
+	return Array.from({ length: count }, (_, index) => ({
+		imgPath: `https://source.unsplash.com/random/800x600?sig=${index}&instrument`,
+	}));
+};
+
+const images = generateRandomImages(5);
 
 export const Carrusel: React.FC = () => {
 	const theme = useTheme();
@@ -40,7 +37,7 @@ export const Carrusel: React.FC = () => {
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1, width: "57%", height: "0%", margin: "0 auto" }}>
+		<Box sx={{ flexGrow: 1, width: "80%", margin: "0 auto", position: "relative" }}>
 			<AutoPlaySwipeableViews
 				axis={theme.direction === "rtl" ? "x-reverse" : "x"}
 				index={activeStep}
@@ -55,36 +52,25 @@ export const Carrusel: React.FC = () => {
 								sx={{
 									display: "block",
 									width: "100%",
-									height: "100%",
+									height: "400px", // Fijar la altura para que todas las imágenes tengan el mismo tamaño
 									objectFit: "cover",
+									borderRadius: 2,
 								}}
 								src={step.imgPath}
-								alt={"algo salio mal"}
+								alt={`Imagen ${index + 1}`}
 							/>
 						) : null}
 					</div>
 				))}
 			</AutoPlaySwipeableViews>
-			<Stack direction="row" justifyContent="space-between" mt="1%">
+			<Stack direction="row" justifyContent="space-between" mt="2%" position="absolute" bottom="10px" width="100%">
 				<Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-					{theme.direction === "rtl" ? (
-						<KeyboardArrowRight />
-					) : (
-						<KeyboardArrowLeft />
-					)}
+					{theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
 					Back
 				</Button>
-				<Button
-					size="small"
-					onClick={handleNext}
-					disabled={activeStep === maxSteps - 1}
-				>
+				<Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
 					Next
-					{theme.direction === "rtl" ? (
-						<KeyboardArrowLeft />
-					) : (
-						<KeyboardArrowRight />
-					)}
+					{theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
 				</Button>
 			</Stack>
 		</Box>

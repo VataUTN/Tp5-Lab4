@@ -1,5 +1,5 @@
-// src/Context/AuthContext.tsx
-import { createContext, useState, ReactNode, useContext } from 'react';
+// src/context/AuthContext.tsx
+import { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -19,6 +19,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [role, setRole] = useState<string | null>(
         localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!).rol : null
     );
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            setUsername(user.nombreUsuario);
+            setRole(user.rol);
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     const login = (user: { nombreUsuario: string, rol: string }) => {
         localStorage.setItem('user', JSON.stringify(user));

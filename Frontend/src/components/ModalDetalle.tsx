@@ -24,15 +24,16 @@ interface ModalDetalleProps {
 	open: boolean;
 	instrumentoId: string;
 	handleClose: () => void;
+	showAgregarButton?: boolean; // New prop to control the visibility of the add button
 }
 
 export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 															  open,
 															  instrumentoId,
 															  handleClose,
+															  showAgregarButton = true,
 														  }) => {
 	const { agregarAlCarrito } = useContext(CarritoContext);
-
 	const [instrumento, setInstrumento] = useState<Instrumento | null>(null);
 
 	useEffect(() => {
@@ -142,11 +143,13 @@ export const ModalDetalle: React.FC<ModalDetalleProps> = ({
 									</Box>
 								)}
 							</Box>
-							<Box>
-								<Button variant="outlined" onClick={handleAgregarAlCarrito}>
-									Agregar al Carrito
-								</Button>
-							</Box>
+							{showAgregarButton && (
+								<Box>
+									<Button variant="outlined" onClick={handleAgregarAlCarrito}>
+										Agregar al Carrito
+									</Button>
+								</Box>
+							)}
 						</Stack>
 					</Stack>
 				) : (
