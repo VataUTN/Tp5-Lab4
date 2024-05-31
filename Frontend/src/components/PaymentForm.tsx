@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Button, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { CarritoContext } from "../context/CarritoContext";
 import {MDBBtn} from "mdb-react-ui-kit";
 
@@ -12,6 +12,14 @@ export const PaymentForm = ({
     const [preferenceId, setPreferenceId] = useState<string | null>(null);
 
     const handlePayment = async () => {
+        const totalEnvio = pedido.detalles.reduce((total, detalle) => {
+            if (detalle.instrumento.costoEnvio !== "G") {
+                return total + parseFloat(detalle.instrumento.costoEnvio);
+            } else {
+                return total;
+            }
+        }, 0);
+
         const response = await fetch(
             "http://localhost:8080/mercadopago/create-preference",
             {
@@ -19,13 +27,14 @@ export const PaymentForm = ({
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(
-                    pedido.detalles.map((detalle) => ({
+                body: JSON.stringify({
+                    items: pedido.detalles.map((detalle) => ({
                         instrumento: detalle.instrumento.instrumento,
                         cantidad: detalle.cantidad,
                         precio: detalle.instrumento.precio,
-                    }))
-                ),
+                    })),
+                    envio: totalEnvio
+                }),
             }
         );
 
