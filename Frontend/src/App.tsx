@@ -11,6 +11,7 @@ import Login from "./screens/Login.tsx";
 import Register from "./screens/Register.tsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.tsx";
 import { Suspense } from "react";
+import {CssBaseline} from "@mui/material";
 
 function App() {
     const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -26,6 +27,7 @@ function App() {
     return (
         <AuthProvider>
             <CarritoProvider>
+
                 <Router>
                     <Navbar />
                     <Suspense fallback={<div>Loading...</div>}>

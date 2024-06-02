@@ -33,41 +33,39 @@ public class Lc4Tp3IndividualApplication {
             c3.setDenominacion("Cuerda");
             Categoria c4 = new Categoria();
             c4.setDenominacion("Teclado");
-            Categoria c5 = new Categoria();
-            c5.setDenominacion("Electronico");
 
             categoriaRepository.save(c1);
             categoriaRepository.save(c2);
             categoriaRepository.save(c3);
             categoriaRepository.save(c4);
-            categoriaRepository.save(c5);
 
             if (instrumentoRepository.findById(1L).isEmpty()) {
                 Instrumento i1 = new Instrumento();
-                i1.setInstrumento("Mandolina Instrumento Musical Stagg Sunburst");
-                i1.setMarca("Stagg");
-                i1.setModelo("M20");
-                i1.setImagen("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNs6g6bp3YDe4XXlxJYifxCv9bxcAmSkTNiw&s");
-                i1.setPrecio("2450");
-                i1.setCostoEnvio("G");
-                i1.setCantidadVendida(28);
-                i1.setDescripcion("Estas viendo una excelente mandolina de la marca Stagg, con un sonido muy dulce, tapa aros y fondo de tilo, y diapasón de palisandro. Es un instrumento acústico (no se enchufa) de cuerdas dobles (4 pares) con la caja ovalada y cóncava, y el mástil corto. Su utilización abarca variados ámbitos, desde rock, folk, country y ensambles experimentales.");
+                i1.setInstrumento("Violín Yamaha V3");
+                i1.setMarca("Yamaha");
+                i1.setModelo("V3");
+                i1.setImagen("https://d1aeri3ty3izns.cloudfront.net/media/49/491088/1200/preview_1.jpg");
+                i1.setPrecio("800");
+                i1.setCostoEnvio("230");
+                i1.setCantidadVendida(20);
+                i1.setDescripcion("El violín Yamaha V3 es una excelente opción para estudiantes avanzados y músicos profesionales. Con una construcción de abeto y arce, ofrece un tono rico y resonante. Viene con estuche y arco incluidos.");
                 i1.setCategoria(c3);
 
                 instrumentoRepository.save(i1);
 
                 Instrumento i2 = new Instrumento();
-                i2.setInstrumento("Pandereta Pandero Instrumento Musical");
-                i2.setMarca("DyM ventas");
-                i2.setModelo("32 sonajas");
-                i2.setImagen("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3VEImb3wx8ojTRNsIkkdvI93RThUtAxFpbg&s");
-                i2.setPrecio("325");
-                i2.setCostoEnvio("150");
-                i2.setCantidadVendida(10);
-                i2.setDescripcion("1 Pandereta - 32 sonajas metálicas. Más de 8 años vendiendo con 100 % de calificaciones POSITIVAS y clientes satisfechos !! ");
+                i2.setInstrumento("Batería Yamaha Stage Custom Birch");
+                i2.setMarca("Yamaha");
+                i2.setModelo("Stage Custom Birch");
+                i2.setImagen("https://sc1.musik-produktiv.com/pic-010055775xxl/yamaha-stage-custom-birch-sbp-2f5-nw6w.jpg");
+                i2.setPrecio("2500");
+                i2.setCostoEnvio("560");
+                i2.setCantidadVendida(37);
+                i2.setDescripcion("La batería Yamaha Stage Custom Birch es una opción ideal para bateristas de todos los niveles. Construida con cascos de abedul, ofrece un sonido potente y equilibrado. Incluye bombo, tom de piso, toms montados, caja, soportes y pedales.");
                 i2.setCategoria(c2);
 
                 instrumentoRepository.save(i2);
+
 
                 Instrumento i3 = new Instrumento();
                 i3.setInstrumento("Guitarra Acústica Fender CD-60S");
@@ -83,17 +81,18 @@ public class Lc4Tp3IndividualApplication {
                 instrumentoRepository.save(i3);
 
                 Instrumento i4 = new Instrumento();
-                i4.setInstrumento("Violín Yamaha V3");
-                i4.setMarca("Yamaha");
-                i4.setModelo("V3");
-                i4.setImagen("https://www.pngall.com/wp-content/uploads/2016/06/Violin-PNG-File.png");
-                i4.setPrecio("800");
-                i4.setCostoEnvio("230");
-                i4.setCantidadVendida(20);
-                i4.setDescripcion("El violín Yamaha V3 es una excelente opción para estudiantes avanzados y músicos profesionales. Con una construcción de abeto y arce, ofrece un tono rico y resonante. Viene con estuche y arco incluidos.");
+                i4.setInstrumento("Guitarra Eléctrica Fender Stratocaster");
+                i4.setMarca("Fender");
+                i4.setModelo("Stratocaster");
+                i4.setImagen("https://d1aeri3ty3izns.cloudfront.net/media/53/535279/1200/preview.jpg");
+                i4.setPrecio("1500");
+                i4.setCostoEnvio("270");
+                i4.setCantidadVendida(22);
+                i4.setDescripcion("La guitarra eléctrica Fender Stratocaster es una de las más icónicas en el mundo de la música. Con un cuerpo de aliso, mástil de arce y pastillas de bobina simple, ofrece un tono versátil y un diseño clásico, ideal para cualquier género musical.");
                 i4.setCategoria(c3);
 
                 instrumentoRepository.save(i4);
+
 
                 Instrumento i5 = new Instrumento();
                 i5.setInstrumento("Bajo Eléctrico Ibanez GSR200");

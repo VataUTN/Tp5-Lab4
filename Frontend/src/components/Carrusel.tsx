@@ -10,14 +10,17 @@ import { Stack } from "@mui/material";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-// Generar URLs de imágenes aleatorias
-const generateRandomImages = (count: number) => {
-	return Array.from({ length: count }, (_, index) => ({
-		imgPath: `https://source.unsplash.com/random/800x600?sig=${index}&instrument`,
-	}));
-};
-
-const images = generateRandomImages(5);
+const images = [
+	{
+		imgPath: "https://images.unsplash.com/photo-1519479029449-38c9aed0f322?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8aW5zdHJ1bWVudHx8fHx8fDE3MTcyMDE2ODE&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=800",
+	},
+	{
+		imgPath: "https://images.unsplash.com/photo-1526857508893-05ed3f2c4755?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8aW5zdHJ1bWVudHx8fHx8fDE3MTcyMDI0MzQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=800",
+	},
+	{
+		imgPath: "https://images.unsplash.com/photo-1461784229652-c9271a46d4c4?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8aW5zdHJ1bWVudHx8fHx8fDE3MTcyMDI0MDg&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=800",
+	}
+];
 
 export const Carrusel: React.FC = () => {
 	const theme = useTheme();

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Box } from "@mui/material";
 import { CarritoContext } from "../context/CarritoContext";
-import {MDBBtn} from "mdb-react-ui-kit";
+import { MDBBtn } from "mdb-react-ui-kit";
 
 export const PaymentForm = ({
                                 handleComprar,
@@ -41,8 +41,8 @@ export const PaymentForm = ({
         const data = await response.json();
         if (data.preferenceId) {
             setPreferenceId(data.preferenceId);
-            // Redirigir a la URL de pago de Mercado Pago en sandbox
-            window.location.href = `https://sandbox.mercadopago.com.ar/checkout/v1/redirect?preference-id=${data.preferenceId}`;
+            // Abrir la URL de pago de Mercado Pago en una nueva ventana
+            window.open(`https://sandbox.mercadopago.com.ar/checkout/v1/redirect?preference-id=${data.preferenceId}`, '_blank');
         } else {
             console.error("Failed to get preferenceId:", data);
         }

@@ -23,9 +23,39 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PaymentForm } from "../components/PaymentForm.tsx";
-import {ModalDetalle} from "../components/ModalDetalle.tsx";
+import { ModalDetalle } from "../components/ModalDetalle.tsx";
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+    root: {
+        backgroundColor: "#f0f0f0",
+        minHeight: "100vh",
+        padding: 0,
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    container: {
+        backgroundColor: "#ffffff",
+        padding: "20px",
+        boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
+        borderRadius: "8px",
+        marginTop: "20px",
+    },
+    card: {
+        marginBottom: "20px",
+    },
+    cardHeader: {
+        backgroundColor: "#e0e0e0",
+    },
+    totalCard: {
+        marginTop: "20px",
+    }
+});
 
 export default function Carrito() {
+    const classes = useStyles();
     const [, setlastId] = useState<number | undefined>(0);
     const [, setShowMessage] = React.useState(false);
     const { pedido, removerDelCarrito, agregarAlCarrito, vaciarCarrito } = React.useContext(CarritoContext);
@@ -122,12 +152,12 @@ export default function Carrito() {
     };
 
     return (
-        <section className="h-100 gradient-custom">
+        <section className={classes.root}>
             <MDBContainer className="py-5 h-100">
                 <MDBRow className="justify-content-center my-4">
                     <MDBCol md="8">
-                        <MDBCard className="mb-4">
-                            <MDBCardHeader className="py-3">
+                        <MDBCard className={classes.card}>
+                            <MDBCardHeader className={`py-3`}>
                                 <MDBTypography tag="h5" className="mb-0">
                                     Carrito
                                 </MDBTypography>
@@ -143,7 +173,7 @@ export default function Carrito() {
                                                     className="w-100"
                                                     alt={detalle.instrumento.instrumento}
                                                     onClick={() => handleOpen(detalle.instrumento.id.toString())} // Use the instrument's ID to open the specific modal
-                                                    style={{cursor: 'pointer'}} // Add cursor pointer to indicate it's clickable
+                                                    style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
                                                 />
                                             </MDBRipple>
                                         </MDBCol>
@@ -205,8 +235,8 @@ export default function Carrito() {
                         </MDBCard>
                     </MDBCol>
                     <MDBCol md="4">
-                        <MDBCard className="mb-4">
-                            <MDBCardHeader>
+                        <MDBCard className={`${classes.card} ${classes.totalCard}`}>
+                            <MDBCardHeader >
                                 <MDBTypography tag="h5" className="mb-0">
                                     Total
                                 </MDBTypography>

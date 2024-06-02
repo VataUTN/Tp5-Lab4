@@ -5,8 +5,50 @@ import CustomTable from "../components/CustomTable";
 import { deleteData, getData } from "../api/genericRequest";
 import { Categoria } from "../types/Categoria";
 import { ModalInstrumento } from "../components/ModalInstrumento";
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+	root: {
+		backgroundColor: "#f0f0f0",
+		minHeight: "100vh",
+		padding: 0,
+		margin: 0,
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+	},
+	container: {
+		backgroundColor: "#ffffff",
+		padding: "20px",
+		boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
+		borderRadius: "8px",
+		marginTop: "20px",
+	},
+	button: {
+		backgroundColor: "#1976d2",
+		color: "#ffffff",
+		'&:hover': {
+			backgroundColor: "#115293",
+		},
+	},
+	modal: {
+		width: "50%",
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+		backgroundColor: "#fff",
+		boxShadow: 24,
+		padding: "16px",
+		borderRadius: "10px",
+	},
+	filterButton: {
+		margin: "5px",
+	}
+});
 
 export const AdminPage = () => {
+	const classes = useStyles();
 	const [instrumentos, setInstrumentos] = useState<Instrumento[]>([]);
 	const [instrumentosFiltrados, setInstrumentosFiltrados] = useState<Instrumento[]>([]);
 	const [selectedInstrumento, setselectedInstrumento] = useState<Instrumento | undefined>(undefined);
@@ -61,8 +103,9 @@ export const AdminPage = () => {
 	};
 
 	return (
-		<Stack direction="column" height="75vh" justifyContent="space-between">
+		<Stack className={classes.root} direction="column" height="75vh" justifyContent="space-between">
 			<Stack
+				className={classes.container}
 				style={{ alignItems: "center" }}
 				sx={{
 					fontFamily: "Roboto, sans-serif",
@@ -73,7 +116,7 @@ export const AdminPage = () => {
 			>
 				<Stack direction="row" m="3%" spacing={2} alignItems="center">
 					{categorias.map((c) => (
-						<Button key={c.id} onClick={() => handleFilter(c.denominacion)}>
+						<Button key={c.id} onClick={() => handleFilter(c.denominacion)} className={classes.filterButton}>
 							{c.denominacion}
 						</Button>
 					))}
@@ -87,14 +130,13 @@ export const AdminPage = () => {
 			</Stack>
 			<Stack direction="row">
 				<Button
+					className={classes.button}
 					sx={{
 						position: "absolute",
 						top: "89%",
 						left: "89%",
 					}}
-
 					variant="contained"
-
 					onClick={() => {
 						handleNew();
 						handleOpen();
@@ -104,19 +146,7 @@ export const AdminPage = () => {
 				</Button>
 			</Stack>
 			<Modal open={open} onClose={handleClose}>
-				<Box
-					sx={{
-						width: "50%",
-						position: "absolute",
-						top: "50%",
-						left: "50%",
-						transform: "translate(-50%, -50%)",
-						bgcolor: "background.paper",
-						boxShadow: 24,
-						p: 4,
-						borderRadius: "10px",
-					}}
-				>
+				<Box className={classes.modal}>
 					<ModalInstrumento
 						existingInstrumento={
 							selectedInstrumento ? selectedInstrumento : undefined
