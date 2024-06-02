@@ -7,6 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Instrumento } from "../types/Instrumento";
 import { Button, Stack } from "@mui/material";
+import { styled } from '@mui/material/styles';
 
 interface CustomTableProps {
 	data: Instrumento[];
@@ -15,6 +16,16 @@ interface CustomTableProps {
 	handleOpen: () => void;
 }
 
+// Estilos para fijar la primera fila (encabezado)
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+	'& .MuiTableCell-head': {
+		position: 'sticky',
+		top: 0,
+		backgroundColor: theme.palette.background.paper,
+		zIndex: 1,
+	},
+}));
+
 export default function CustomTable({
 										data,
 										handleSelection,
@@ -22,16 +33,16 @@ export default function CustomTable({
 										handleOpen,
 									}: CustomTableProps) {
 	return (
-		<TableContainer
+		<StyledTableContainer
 			component={Paper}
 			sx={{
 				width: "90%",
+				maxHeight: 440, // Ajustar la altura máxima según sea necesario
 			}}
 		>
 			<Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
 				<TableHead>
 					<TableRow>
-						<TableCell sx={{ backgroundColor: "#f0f0f0", fontWeight: "bold" }}>#</TableCell>
 						<TableCell>Instrumento</TableCell>
 						<TableCell>Marca</TableCell>
 						<TableCell>Modelo</TableCell>
@@ -46,7 +57,6 @@ export default function CustomTable({
 							key={row.instrumento}
 							sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 						>
-							<TableCell sx={{ backgroundColor: "#f0f0f0", fontWeight: "bold" }}>{index + 1}</TableCell>
 							<TableCell>{row.instrumento}</TableCell>
 							<TableCell>{row.marca}</TableCell>
 							<TableCell>{row.modelo}</TableCell>
@@ -75,6 +85,6 @@ export default function CustomTable({
 					))}
 				</TableBody>
 			</Table>
-		</TableContainer>
+		</StyledTableContainer>
 	);
 }
