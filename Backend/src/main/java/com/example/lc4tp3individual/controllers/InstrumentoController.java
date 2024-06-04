@@ -14,15 +14,6 @@ import java.util.Optional;
 @RequestMapping(path = "/instrumento")
 public class InstrumentoController extends BaseControllerImp<Instrumento, InstrumentoServiceImp>{
 
-    @GetMapping("/masVendidos")
-    public ResponseEntity<?> getTopMasVendidos(){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.findTopByOrderByCantidadVendidaDesc());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error, por favor intente mas tarde.\"}");
-        }
-    }
-
     @PostMapping("/update-vendidos/{id}")
     public ResponseEntity<?> updateVendidos(@PathVariable Long id, @RequestBody Map<String, Integer> cantidadVendida) {
         try {

@@ -99,12 +99,12 @@ export default function Navbar() {
 								<MenuItem onClick={() => {
 									handleLogout();
 									handleMenuClose();
-								}}>Logout</MenuItem>
+								}}>Cerrar sesión</MenuItem>
 							</>
 						) : (
 							<>
-								<MenuItem component={Link} to="/login" onClick={handleMenuClose}>Login</MenuItem>
-								<MenuItem component={Link} to="/register" onClick={handleMenuClose}>Register</MenuItem>
+								<MenuItem component={Link} to="/login" onClick={handleMenuClose}>Iniciar sesión</MenuItem>
+								<MenuItem component={Link} to="/register" onClick={handleMenuClose}>Registrarse</MenuItem>
 							</>
 						)}
 					</Menu>

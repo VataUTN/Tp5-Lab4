@@ -1,3 +1,4 @@
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -5,15 +6,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Instrumento } from "../types/Instrumento";
 import { Button, Stack } from "@mui/material";
 import { styled } from '@mui/material/styles';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { Instrumento } from "../types/Instrumento";
 
 interface CustomTableProps {
 	data: Instrumento[];
 	handleSelection: (item: Instrumento) => void;
 	handleDelete: (item: Instrumento) => void;
 	handleOpen: () => void;
+	handleClose: () => void; // Agregado para cerrar el modal después de guardar el PDF
 }
 
 // Estilos para fijar la primera fila (encabezado)
@@ -31,7 +35,37 @@ export default function CustomTable({
 										handleSelection,
 										handleDelete,
 										handleOpen,
+										handleClose,
 									}: CustomTableProps) {
+	const handleSaveAsPDF = async (instrumentoId: number) => {
+		try {
+			const response = await fetch(
+				`http://localhost:8080/report/pdf/${instrumentoId}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/pdf",
+					},
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Error generating PDF");
+			}
+
+			const blob = await response.blob();
+			const url = window.URL.createObjectURL(blob);
+			const link = document.createElement("a");
+			link.href = url;
+			link.setAttribute("download", "instrumento.pdf");
+			document.body.appendChild(link);
+			link.click();
+			link.parentNode?.removeChild(link);
+		} catch (error) {
+			console.error("Error generating PDF:", error);
+		}
+	};
+
 	return (
 		<StyledTableContainer
 			component={Paper}
@@ -78,6 +112,13 @@ export default function CustomTable({
 										}}
 									>
 										Eliminar
+									</Button>
+									<Button
+										onClick={() => {
+											handleSaveAsPDF(row.id)
+										}}
+									>
+										Guardar como PDF
 									</Button>
 								</Stack>
 							</TableCell>

@@ -7,6 +7,7 @@ import {
 import { Carrusel } from "../components/Carrusel";
 
 import {makeStyles} from '@mui/styles';
+import BarChartComponent from "../components/charts/BarChartComponent.tsx";
 
 const useStyles = makeStyles({
 	root: {
@@ -35,7 +36,6 @@ export const HomePage = () => {
 				<Typography variant="h2" align="center" gutterBottom>
 					Musical Hendrix
 				</Typography>
-
 				<Box sx={{ py: 4 }}>
 					<Carrusel />
 				</Box>

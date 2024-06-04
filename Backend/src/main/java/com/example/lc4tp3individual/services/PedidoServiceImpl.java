@@ -6,6 +6,9 @@ import com.example.lc4tp3individual.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 public class PedidoServiceImpl extends BaseServiceImp<Pedido, Long> implements PedidoService{
 
@@ -20,5 +23,14 @@ public class PedidoServiceImpl extends BaseServiceImp<Pedido, Long> implements P
     @Override
     public Pedido createPedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
+    }
+
+
+    public List<Pedido> findByFechaPedidoBetween(LocalDate fechaDesde, LocalDate fechaHasta) throws Exception {
+        try {
+            return pedidoRepository.findByFechaPedidoBetween(fechaDesde, fechaHasta);
+        } catch (Exception e) {
+            throw new Exception("Error al buscar detalles del pedido por rango de fechas", e);
+        }
     }
 }
